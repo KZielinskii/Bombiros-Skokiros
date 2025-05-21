@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './LoginRegisterForm.css';
 
 function LoginRegisterForm({ onLogin }) {
     const [username, setUsername] = useState('');
@@ -10,82 +11,84 @@ function LoginRegisterForm({ onLogin }) {
         e.preventDefault();
         setError('');
 
-        const url = isLogin ? 'http://localhost:8880/api/auth/login' : 'http://localhost:8880/api/auth/register';
+        const url = isLogin
+            ? 'http://localhost:8880/api/auth/login'
+            : 'http://localhost:8880/api/auth/register';
+
         const body = { username, password };
-        console.log(JSON.stringify(body));
 
         try {
             const response = await fetch(url, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
             });
+
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Logowanie nie powiodło się');
+                throw new Error(errorData.message || 'Błąd logowania/rejestracji');
+            }
+
+            const user = await response.json();
+
+            if (isLogin) {
+                onLogin(user);
+            } else {
+                const loginResponse = await fetch('http://localhost:8880/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                if (loginResponse.ok) {
+                    const newUser = await loginResponse.json();
+                    onLogin(newUser);
+                } else {
+                    setIsLogin(true);
+                }
             }
         } catch (error) {
-            console.error('Błąd podczas: POST request:', error);
             setError(error.message);
         }
     };
 
-    return (
-        <div>
-        {
-            isLogin ? (
-                <div>
-                    <h2>Logowanie</h2>
-                    <form onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
-                        <input
-                            type="password"
-                            placeholder="Hasło"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <button type="submit">Zaloguj się</button>
-                    </form>
-                    <div>
-                        Nie posiadasz konta?
-                        <button onClick={() => setIsLogin(!isLogin)}>Zarejestruj się</button>
-                    </div>
 
+    return (
+        <div className="container">
+            <div className="form-box">
+                <h2>{isLogin ? 'Logowanie' : 'Rejestracja'}</h2>
+
+                {error && <p className="error-message">{error}</p>}
+
+                <form onSubmit={handleSubmit} className="form">
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                        className="input"
+                    />
+                    <input
+                        type="password"
+                        placeholder="Hasło"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="input"
+                    />
+                    <button type="submit" className="submit-btn">
+                        {isLogin ? 'Zaloguj się' : 'Zarejestruj się'}
+                    </button>
+                </form>
+
+                <div className="switch-mode">
+                    {isLogin ? 'Nie posiadasz konta?' : 'Posiadasz już konto?'}{' '}
+                    <button onClick={() => setIsLogin(!isLogin)} className="switch-btn">
+                        {isLogin ? 'Zarejestruj się' : 'Zaloguj się'}
+                    </button>
                 </div>
-            ) : (
-                <div>
-                    <h2>Rejestracja</h2>
-                    <form onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
-                        <input
-                            type="password"
-                            placeholder="Hasło"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <button type="submit">Zarejestruj się</button>
-                    </form>
-                    <div>
-                        Posiadasz już konto?
-                        <button onClick={() => setIsLogin(!isLogin)}>Zaloguj się</button>
-                    </div>
-                </div>
-            )
-        }
+            </div>
         </div>
     );
 }
