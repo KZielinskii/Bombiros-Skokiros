@@ -1,11 +1,12 @@
 package com.backend.service;
 
-import com.backend.model.UserApp;
-import com.backend.repository.UserAppRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.backend.model.UserApp;
+import com.backend.repository.UserAppRepository;
 
 @Service
 public class UserAppService {
@@ -14,6 +15,10 @@ public class UserAppService {
 
     public UserAppService(UserAppRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public Optional<UserApp> getUserByUsername(String username) {
+    return userRepository.findByUsername(username);
     }
 
     public List<UserApp> getAllUsers() {

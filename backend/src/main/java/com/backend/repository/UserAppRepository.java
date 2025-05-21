@@ -1,9 +1,11 @@
 package com.backend.repository;
 
-import com.backend.model.UserApp;
-import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.backend.model.UserApp;
+
 public interface UserAppRepository extends JpaRepository<UserApp, Long> {
-    Optional<UserApp> findByUsername(String login);
+    Optional<UserApp> findByUsername(String username);
 }
