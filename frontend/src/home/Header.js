@@ -7,15 +7,16 @@ function Header({ loggedUser, onLogout }) {
     const navigate = useNavigate();
 
     const toggleDropdown = () => setIsOpen(!isOpen);
-    const toGlobalScore = () => {
-        navigate('/global-scores');
-    };
-
+    const toGlobalScore = () => navigate("/score");
+    const goToHome = () => navigate("/");
     const logout = () => onLogout();
 
     return (
         <header className="header">
-            <h2>Moja Aplikacja</h2>
+            <h2 onClick={goToHome} className="header-title clickable">
+                Moja Aplikacja
+            </h2>
+
             {loggedUser && (
                 <>
                     <div className="dropdown">
