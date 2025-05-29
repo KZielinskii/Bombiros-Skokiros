@@ -1,12 +1,9 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
 function Header({ loggedUser, onLogout }) {
-    const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
-    const toggleDropdown = () => setIsOpen(!isOpen);
     const toGlobalScore = () => navigate("/score");
     const goToHome = () => navigate("/");
     const logout = () => onLogout();
@@ -16,27 +13,27 @@ function Header({ loggedUser, onLogout }) {
             <h2 onClick={goToHome} className="header-title clickable">
                 Moja Aplikacja
             </h2>
-
-            {loggedUser && (
-                <>
-                    <div className="dropdown">
-                        <button onClick={toggleDropdown} className="dropdown-btn">
-                            Statystyki
-                        </button>
-                        {isOpen && (
+            <div className="header-content">
+                {loggedUser && (
+                    <>
+                        <div className="dropdown">
+                            <button className="dropdown-btn">
+                                Menu
+                            </button>
                             <div className="dropdown-content">
                                 <button className="button">Twoje</button>
-                                <button onClick={toGlobalScore} className="button">Globalne</button>
+                                <button onClick={toGlobalScore} className="button">Statystyki</button>
                             </div>
-                        )}
-                    </div>
-                    <div className="logout">
-                        <button onClick={logout} className="dropdown-btn">
-                            Wyloguj się
-                        </button>
-                    </div>
-                </>
-            )}
+                        </div>
+                        <div className="logout">
+                            <button onClick={logout} className="dropdown-btn">
+                                Wyloguj się
+                            </button>
+                        </div>
+                    </>
+                )}
+            </div>
+
         </header>
     );
 }
