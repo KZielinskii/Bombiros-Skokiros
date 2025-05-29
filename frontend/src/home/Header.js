@@ -5,6 +5,7 @@ function Header({ loggedUser, onLogout }) {
     const navigate = useNavigate();
 
     const toGlobalScore = () => navigate("/score");
+    const goToGameForm = () => navigate("/game-form");
     const goToHome = () => navigate("/");
     const logout = () => onLogout();
 
@@ -21,7 +22,7 @@ function Header({ loggedUser, onLogout }) {
                                 Menu
                             </button>
                             <div className="dropdown-content">
-                                <button className="button">Twoje</button>
+                                <button onClick={goToGameForm} className="button">Gra</button>
                                 <button onClick={toGlobalScore} className="button">Statystyki</button>
                             </div>
                         </div>
