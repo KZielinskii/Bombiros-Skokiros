@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import LoginRegisterForm from './LoginRegisterForm';
+import Score from './Score';
 
 function App() {
     const [loggedUser, setLoggedUser] = useState(null);
@@ -21,21 +23,27 @@ function App() {
         }
     }, [loggedUser]);
 
-
     return (
-        <div>
-            <Header loggedUser={loggedUser} onLogout={() => setLoggedUser(null)}/>
+        <Router>
+            <Header loggedUser={loggedUser} onLogout={() => setLoggedUser(null)} />
 
             <main>
-                {loggedUser ? (
-                        <h1>Witaj, {loggedUser.username}</h1>
-                ) : (
-                    <LoginRegisterForm onLogin={setLoggedUser} />
-                )}
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            loggedUser
+                                ? <h1>Witaj, {loggedUser.username}</h1>
+                                : <LoginRegisterForm onLogin={setLoggedUser} />
+                        }
+                    />
+                    <Route path="/score" element={<Score />} />
+                    <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
             </main>
 
             <Footer />
-        </div>
+        </Router>
     );
 }
 

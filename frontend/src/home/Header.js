@@ -1,14 +1,22 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
 function Header({ loggedUser, onLogout }) {
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
+
     const toggleDropdown = () => setIsOpen(!isOpen);
+    const toGlobalScore = () => navigate("/score");
+    const goToHome = () => navigate("/");
     const logout = () => onLogout();
 
     return (
         <header className="header">
-            <h2>Moja Aplikacja</h2>
+            <h2 onClick={goToHome} className="header-title clickable">
+                Moja Aplikacja
+            </h2>
+
             {loggedUser && (
                 <>
                     <div className="dropdown">
@@ -17,8 +25,8 @@ function Header({ loggedUser, onLogout }) {
                         </button>
                         {isOpen && (
                             <div className="dropdown-content">
-                                <div className="tile">Twoje</div>
-                                <div className="tile">Globalne</div>
+                                <button className="button">Twoje</button>
+                                <button onClick={toGlobalScore} className="button">Globalne</button>
                             </div>
                         )}
                     </div>
