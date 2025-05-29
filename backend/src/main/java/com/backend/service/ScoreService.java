@@ -3,6 +3,8 @@ package com.backend.service;
 import com.backend.model.Score;
 import com.backend.model.UserApp;
 import com.backend.repository.ScoreRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +22,8 @@ public class ScoreService {
         return repository.save(score);
     }
 
-    public List<Score> getTopScores() {
-        return repository.findTop10ByOrderByScoreDesc();
+    public Page<Score> getTopScores(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public List<Score> getScoresByUser(UserApp user) {
