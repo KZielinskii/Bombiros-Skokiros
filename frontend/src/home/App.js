@@ -36,12 +36,7 @@ function App() {
                         path="/"
                         element={
                             loggedUser
-                                ? (
-                                    <div>
-                                        <h1>Witaj, {loggedUser.username}</h1>
-                                        <Carousel />
-                                    </div>
-                                )
+                                ? <Carousel />
                                 : <LoginRegisterForm onLogin={setLoggedUser}/>
                         }
                     />

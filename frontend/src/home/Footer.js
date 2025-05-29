@@ -1,7 +1,11 @@
+import './Footer.css'
 function Footer() {
     return (
         <footer className="footer">
-            <p>© 2025 Moja Aplikacja</p>
+            <p>
+                © 2025 Moja Aplikacja
+            </p>
+
         </footer>
     );
 }

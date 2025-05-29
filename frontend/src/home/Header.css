@@ -1,5 +1,5 @@
 .header {
-    background-color: #282c34;
+    background-color: darkslategray;
     padding: 1rem;
     color: white;
     display: flex;
@@ -13,7 +13,7 @@
 }
 
 .header-title:hover {
-    color: #007bff;
+    color: lightgray;
 }
 
 .header-content {
@@ -27,10 +27,10 @@
 }
 
 .dropdown-btn {
-    background-color: slategray;
+    background-color: darkslategray;
     color: white;
-    padding: 0.5rem 1rem;
-    border: 3px solid dimgray;
+    padding: 1rem 2rem;
+    border: 2px solid dimgray;
     border-radius: 0.3rem;
     cursor: pointer;
 }
@@ -44,7 +44,7 @@
     right: 0;
     top: 100%;
     background-color: white;
-    border: 3px solid dimgray;
+    border: 2px solid dimgray;
     border-radius: 0.3rem;
     display: none;
     flex-direction: column;
@@ -58,9 +58,9 @@
 }
 
 .button-menu {
-    background-color: slategray;
+    background-color: darkslategray;
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 1rem 2rem;
     border: 1px solid dimgray;
     cursor: pointer;
     text-align: center;
