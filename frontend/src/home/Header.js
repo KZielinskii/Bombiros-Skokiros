@@ -22,8 +22,8 @@ function Header({ loggedUser, onLogout }) {
                                 Menu
                             </button>
                             <div className="dropdown-content">
-                                <button onClick={goToGameForm} className="button">Gra</button>
-                                <button onClick={toGlobalScore} className="button">Statystyki</button>
+                                <button onClick={goToGameForm} className="button-menu">Gra</button>
+                                <button onClick={toGlobalScore} className="button-menu">Statystyki</button>
                             </div>
                         </div>
                         <div className="logout">

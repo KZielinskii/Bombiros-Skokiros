@@ -5,7 +5,8 @@ import Footer from './Footer';
 import LoginRegisterForm from './LoginRegisterForm';
 import Score from './Score';
 import GameForm from "./GameForm";
-import Game from "./Game";
+import Game from './Game';
+import Carousel from './Carousel';
 
 function App() {
     const [loggedUser, setLoggedUser] = useState(null);
@@ -35,12 +36,17 @@ function App() {
                         path="/"
                         element={
                             loggedUser
-                                ? <h1>Witaj, {loggedUser.username}</h1>
-                                : <LoginRegisterForm onLogin={setLoggedUser} />
+                                ? (
+                                    <div>
+                                        <h1>Witaj, {loggedUser.username}</h1>
+                                        <Carousel />
+                                    </div>
+                                )
+                                : <LoginRegisterForm onLogin={setLoggedUser}/>
                         }
                     />
-                    <Route path="/score" element={<Score />} />
-                    <Route path="*" element={<Navigate to="/" />} />
+                    <Route path="/score" element={<Score/>}/>
+                    <Route path="*" element={<Navigate to="/"/>}/>
                     <Route path="/game-form" element={<GameForm/>} />
                     <Route path="/play" element={<Game/>} />
                 </Routes>

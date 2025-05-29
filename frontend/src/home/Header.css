@@ -57,7 +57,7 @@
     display: flex;
 }
 
-.button {
+.button-menu {
     background-color: slategray;
     color: white;
     padding: 0.5rem 1rem;
@@ -68,6 +68,6 @@
     display: inline-block;
 }
 
-.button:hover {
+.button-menu:hover {
     background-color: lightslategray;
 }
