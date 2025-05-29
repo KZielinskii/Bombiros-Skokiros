@@ -15,7 +15,7 @@
     background-color: slategray;
     color: white;
     padding: 0.5rem 1rem;
-    border: 3px solid slategray;
+    border: 3px solid dimgray;
     border-radius: 0.3rem;
     cursor: pointer;
 }
@@ -29,7 +29,7 @@
     right: 0;
     top: 105%;
     background-color: white;
-    border: 3px solid slategray;
+    border: 3px solid dimgray;
     border-radius: 0.3rem;
     display: flex;
     flex-direction: column;
@@ -38,18 +38,17 @@
     z-index: 100;
 }
 
-.tile {
-    padding: 1rem;
-    border-bottom: 1px solid slategray;
-    cursor: pointer;
+.button {
     background-color: slategray;
-    transition: background-color 0.5s;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: 1px solid dimgray;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
 }
 
-.tile:last-child {
-    border-bottom: none;
-}
-
-.tile:hover {
+.button:hover {
     background-color: lightslategray;
 }
