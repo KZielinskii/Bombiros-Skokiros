@@ -1,0 +1,125 @@
+.game-form-container {
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #f7f9fc;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    font-size: 14px;
+    color: #444;
+}
+
+.input,
+.select {
+    margin-top: 6px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: white;
+    transition: border-color 0.2s;
+}
+
+.input:focus,
+.select:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+.button {
+    margin-top: 10px;
+    padding: 10px 10px;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #357abd;
+}
+
+.error {
+    color: #d32f2f;
+    font-weight: 600;
+    margin-top: 8px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.subtitle {
+    margin-top: 40px;
+}
+
+.no-players {
+    font-style: italic;
+    color: #555;
+}
+
+.player-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+.player-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    font-size: 15px;
+}
+
+.small-button {
+    padding: 5px 10px;
+    margin-left: 6px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    background-color: #4a90e2;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.small-button:hover {
+    background-color: #357abd;
+}
+
+.delete-button {
+    background-color: #e74c3c;
+}
+
+.delete-button:hover {
+    background-color: #c0392b;
+}
