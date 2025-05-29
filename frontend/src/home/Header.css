@@ -16,6 +16,11 @@
     color: #007bff;
 }
 
+.header-content {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
 
 .dropdown {
     position: relative;
@@ -37,15 +42,19 @@
 .dropdown-content {
     position: absolute;
     right: 0;
-    top: 105%;
+    top: 100%;
     background-color: white;
     border: 3px solid dimgray;
     border-radius: 0.3rem;
-    display: flex;
+    display: none;
     flex-direction: column;
     width: 150px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     z-index: 100;
+}
+
+.dropdown:hover .dropdown-content {
+    display: flex;
 }
 
 .button {
