@@ -2,15 +2,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 600px;
+    height: 100vh;
     background-color: #f3f4f6;
     padding: 20px;
 }
 
 .form-box {
     background-color: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
+    padding: 60px;
+    border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 360px;
