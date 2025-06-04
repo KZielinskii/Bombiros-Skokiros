@@ -43,14 +43,14 @@
 
 .input:focus,
 .select:focus {
-    border-color: #4a90e2;
+    border-color: darkslategray;
     outline: none;
 }
 
 .button {
     margin-top: 10px;
     padding: 10px 10px;
-    background-color: #4a90e2;
+    background-color: darkslategray;
     border: none;
     border-radius: 8px;
     color: white;
@@ -61,7 +61,7 @@
 }
 
 .button:hover {
-    background-color: #357abd;
+    background-color: lightslategrey;
 }
 
 .error {
@@ -107,13 +107,13 @@
     cursor: pointer;
     font-weight: 600;
     font-size: 13px;
-    background-color: #4a90e2;
+    background-color: lightslategrey;
     color: white;
     transition: background-color 0.3s;
 }
 
 .small-button:hover {
-    background-color: #357abd;
+    background-color: darkslategrey;
 }
 
 .delete-button {
