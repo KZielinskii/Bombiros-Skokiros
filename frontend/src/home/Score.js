@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Score.css";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 function Score() {
-    const [scores, setScores] = useState([]);
+    const [allScores, setAllScores] = useState([]);  // pełna lista
+    const [scores, setScores] = useState([]);        // wyniki po filtrze + stronicowaniu
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [searchUsername, setSearchUsername] = useState("");
@@ -25,7 +26,6 @@ function Score() {
         setEditValue("");
     };
 
-
     const saveEdit = async () => {
         try {
             await axios.put(`/api/scores/${editingScore.id}`, {
@@ -40,18 +40,13 @@ function Score() {
         }
     };
 
-
     const fetchScores = async () => {
         setLoading(true);
         try {
-            const response = searchUsername
-                ? await axios.get(`/api/scores/user/${searchUsername}`)
-                : await axios.get(`/api/scores/top?page=${page}&size=${PAGE_SIZE}`);
-
+            const response = await axios.get(`/api/scores/top?page=0&size=1000`);
             const data = response.data;
-
-            setScores(data.content || data);
-            setTotalPages(data.totalPages || 1);
+            const scores = data.content || data;
+            setAllScores(scores);
         } catch (err) {
             console.error("Błąd przy pobieraniu wyników:", err);
         } finally {
@@ -59,9 +54,34 @@ function Score() {
         }
     };
 
+    // Efekt do aktualizacji widocznych wyników przy zmianie allScores, searchUsername lub page
+    useEffect(() => {
+        // Filtrowanie lokalne po username
+        const filtered = searchUsername
+            ? allScores.filter(s =>
+                s.username.toLowerCase().includes(searchUsername.toLowerCase())
+            )
+            : allScores;
+
+        // Obliczamy totalPages dla aktualnego filtra
+        const pages = Math.ceil(filtered.length / PAGE_SIZE);
+        setTotalPages(pages);
+
+        // Pobieramy tylko wyniki dla aktualnej strony
+        const start = page * PAGE_SIZE;
+        const pagedScores = filtered.slice(start, start + PAGE_SIZE);
+
+        setScores(pagedScores);
+    }, [allScores, searchUsername, page]);
+
+    // Gdy zmienia się searchUsername resetujemy stronę na 0
+    useEffect(() => {
+        setPage(0);
+    }, [searchUsername]);
+
     useEffect(() => {
         fetchScores();
-    }, [page, searchUsername]);
+    }, []);
 
     const handleDelete = async (id) => {
         if (!window.confirm("Na pewno chcesz usunąć wynik?")) return;
@@ -76,7 +96,7 @@ function Score() {
         }
 
         try {
-            const response = await axios.post("/api/scores", {
+            await axios.post("/api/scores", {
                 score: 10,
                 username: username
             });
@@ -96,10 +116,7 @@ function Score() {
                 type="text"
                 placeholder="🔍 Szukaj po nazwie użytkownika..."
                 value={searchUsername}
-                onChange={(e) => {
-                    setSearchUsername(e.target.value);
-                    setPage(0);
-                }}
+                onChange={(e) => setSearchUsername(e.target.value)}
                 className="score-input"
             />
 
@@ -125,66 +142,72 @@ function Score() {
                         </tr>
                         </thead>
                         <tbody>
-                        {scores.map((score, index) => (
-                            <tr key={score.id}>
-                                <td>{page * PAGE_SIZE + index + 1}</td>
-                                <td>{score.username}</td>
-                                <td>
-                                    {editingScore?.id === score.id ? (
-                                        <input
-                                            type="number"
-                                            value={editValue}
-                                            onChange={(e) => setEditValue(e.target.value)}
-                                            className="edit-input"
-                                        />
-                                    ) : (
-                                        score.score
-                                    )}
-                                </td>
-
-                                <td>{new Date(score.dateTime).toLocaleDateString('pl-PL')}</td>
-                                <td>{new Date(score.dateTime).toLocaleTimeString('pl-PL')}</td>
-                                <td>
-                                    {editingScore?.id === score.id ? (
-                                        <>
-                                            <button className="save-btn" onClick={saveEdit}>Zapisz</button>
-                                            <button className="cancel-btn" onClick={cancelEdit}>Anuluj</button>
-                                        </>
-                                    ) : (
-                                        <button className="edit-btn" onClick={() => startEdit(score)}>Edytuj</button>
-                                    )}
-                                    <button className="delete-btn" onClick={() => handleDelete(score.id)}>
-                                        Usuń
-                                    </button>
+                        {scores.length === 0 ? (
+                            <tr>
+                                <td colSpan={6} style={{ textAlign: "center" }}>
+                                    Brak wyników
                                 </td>
                             </tr>
-                        ))}
+                        ) : (
+                            scores.map((score, index) => (
+                                <tr key={score.id}>
+                                    <td>{page * PAGE_SIZE + index + 1}</td>
+                                    <td>{score.username}</td>
+                                    <td>
+                                        {editingScore?.id === score.id ? (
+                                            <input
+                                                type="number"
+                                                value={editValue}
+                                                onChange={(e) => setEditValue(e.target.value)}
+                                                className="edit-input"
+                                            />
+                                        ) : (
+                                            score.score
+                                        )}
+                                    </td>
+
+                                    <td>{new Date(score.dateTime).toLocaleDateString('pl-PL')}</td>
+                                    <td>{new Date(score.dateTime).toLocaleTimeString('pl-PL')}</td>
+                                    <td>
+                                        {editingScore?.id === score.id ? (
+                                            <>
+                                                <button className="save-btn" onClick={saveEdit}>Zapisz</button>
+                                                <button className="cancel-btn" onClick={cancelEdit}>Anuluj</button>
+                                            </>
+                                        ) : (
+                                            <button className="edit-btn" onClick={() => startEdit(score)}>Edytuj</button>
+                                        )}
+                                        <button className="delete-btn" onClick={() => handleDelete(score.id)}>
+                                            Usuń
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                         </tbody>
                     </table>
                 </div>
             )}
 
-            {!searchUsername && (
-                <div className="score-pagination">
-                    <button
-                        disabled={page === 0}
-                        onClick={() => setPage((p) => p - 1)}
-                        className="pagination-btn"
-                    >
-                        ⬅ Poprzednia
-                    </button>
-                    <span>
-                        Strona {page + 1} z {totalPages}
-                    </span>
-                    <button
-                        disabled={page >= totalPages - 1}
-                        onClick={() => setPage((p) => p + 1)}
-                        className="pagination-btn"
-                    >
-                        Następna ➡
-                    </button>
-                </div>
-            )}
+            <div className="score-pagination">
+                <button
+                    disabled={page === 0}
+                    onClick={() => setPage(p => p - 1)}
+                    className="pagination-btn"
+                >
+                    ⬅ Poprzednia
+                </button>
+                <span>
+                    Strona {totalPages === 0 ? 0 : page + 1} z {totalPages}
+                </span>
+                <button
+                    disabled={page >= totalPages - 1}
+                    onClick={() => setPage(p => p + 1)}
+                    className="pagination-btn"
+                >
+                    Następna ➡
+                </button>
+            </div>
         </div>
     );
 }

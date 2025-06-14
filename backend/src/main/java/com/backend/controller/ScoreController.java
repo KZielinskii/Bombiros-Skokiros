@@ -7,8 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,10 +30,11 @@ public class ScoreController {
     @GetMapping("/top")
     public ResponseEntity<Page<Score>> getTopScores(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("score").descending());
         return ResponseEntity.ok(scoreService.getTopScores(pageable));
     }
+
 
     @GetMapping
     public ResponseEntity<List<Score>> getAllScores() {
