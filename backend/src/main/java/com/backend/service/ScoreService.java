@@ -26,12 +26,11 @@ public class ScoreService {
         return repository.findAll(pageable);
     }
 
-    public List<Score> getScoresByUser(UserApp user) {
-        return repository.findByUser(user);
-    }
-
     public List<Score> getScoresByUsername(String username) {
         return repository.findByUserUsername(username);
     }
 
+    public void deleteScore(Long id) {
+        repository.deleteById(id);
+    }
 }

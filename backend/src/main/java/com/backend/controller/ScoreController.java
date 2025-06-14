@@ -26,17 +26,22 @@ public class ScoreController {
         return ResponseEntity.ok(scoreService.saveScore(score));
     }
 
-    @GetMapping("/pages")
+    @GetMapping("/top")
     public ResponseEntity<Page<Score>> getTopScores(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("value").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("score").descending());
         return ResponseEntity.ok(scoreService.getTopScores(pageable));
     }
-
 
     @GetMapping("/user/{username}")
     public ResponseEntity<List<Score>> getUserScores(@PathVariable String username) {
         return ResponseEntity.ok(scoreService.getScoresByUsername(username));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteScore(@PathVariable Long id) {
+        scoreService.deleteScore(id);
+        return ResponseEntity.noContent().build();
     }
 }
