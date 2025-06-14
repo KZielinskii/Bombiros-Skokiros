@@ -7,7 +7,11 @@ function Header({ loggedUser, onLogout }) {
     const toGlobalScore = () => navigate("/score");
     const goToGameForm = () => navigate("/game-form");
     const goToHome = () => navigate("/");
-    const logout = () => onLogout();
+    const logout = () => {
+        onLogout();
+        navigate("/");
+    };
+
 
     return (
         <header className="header">

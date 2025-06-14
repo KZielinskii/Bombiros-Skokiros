@@ -23,6 +23,7 @@ function App() {
             localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
         } else {
             localStorage.removeItem("loggedUser");
+            localStorage.removeItem("username");
         }
     }, [loggedUser]);
 

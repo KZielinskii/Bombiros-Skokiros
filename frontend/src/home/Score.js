@@ -12,6 +12,34 @@ function Score() {
     const [loading, setLoading] = useState(false);
     const [username, setUsername] = useState(localStorage.getItem('username') || '');
 
+    const [editingScore, setEditingScore] = useState(null);
+    const [editValue, setEditValue] = useState("");
+
+    const startEdit = (score) => {
+        setEditingScore(score);
+        setEditValue(score.score);
+    };
+
+    const cancelEdit = () => {
+        setEditingScore(null);
+        setEditValue("");
+    };
+
+
+    const saveEdit = async () => {
+        try {
+            await axios.put(`/api/scores/${editingScore.id}`, {
+                ...editingScore,
+                score: editValue
+            });
+            setEditingScore(null);
+            await fetchScores();
+        } catch (err) {
+            console.error("Błąd przy edycji wyniku:", err);
+            alert("Nie udało się zaktualizować wyniku");
+        }
+    };
+
 
     const fetchScores = async () => {
         setLoading(true);
@@ -101,13 +129,30 @@ function Score() {
                             <tr key={score.id}>
                                 <td>{page * PAGE_SIZE + index + 1}</td>
                                 <td>{score.username}</td>
-                                <td>{score.score}</td>
+                                <td>
+                                    {editingScore?.id === score.id ? (
+                                        <input
+                                            type="number"
+                                            value={editValue}
+                                            onChange={(e) => setEditValue(e.target.value)}
+                                            className="edit-input"
+                                        />
+                                    ) : (
+                                        score.score
+                                    )}
+                                </td>
+
                                 <td>{new Date(score.dateTime).toLocaleDateString('pl-PL')}</td>
                                 <td>{new Date(score.dateTime).toLocaleTimeString('pl-PL')}</td>
                                 <td>
-                                    <button className="edit-btn" onClick={() => alert("Edit not implemented yet")}>
-                                        Edytuj
-                                    </button>
+                                    {editingScore?.id === score.id ? (
+                                        <>
+                                            <button className="save-btn" onClick={saveEdit}>Zapisz</button>
+                                            <button className="cancel-btn" onClick={cancelEdit}>Anuluj</button>
+                                        </>
+                                    ) : (
+                                        <button className="edit-btn" onClick={() => startEdit(score)}>Edytuj</button>
+                                    )}
                                     <button className="delete-btn" onClick={() => handleDelete(score.id)}>
                                         Usuń
                                     </button>

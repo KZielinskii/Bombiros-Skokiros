@@ -37,6 +37,18 @@ public class ScoreController {
         return ResponseEntity.ok(scoreService.getTopScores(pageable));
     }
 
+    @GetMapping
+    public ResponseEntity<List<Score>> getAllScores() {
+        return ResponseEntity.ok(scoreService.getAllScores());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Score> updateScore(@PathVariable Long id, @RequestBody Score updatedScore) {
+        Score updated = scoreService.updateScore(id, updatedScore);
+        return ResponseEntity.ok(updated);
+    }
+
+
     @GetMapping("/user/{username}")
     public ResponseEntity<List<Score>> getUserScores(@PathVariable String username) {
         return ResponseEntity.ok(scoreService.getScoresByUsername(username));
