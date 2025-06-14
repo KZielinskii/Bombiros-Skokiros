@@ -15,16 +15,17 @@ import java.util.List;
 public class ScoreService {
 
     private final ScoreRepository repository;
+    private final UserAppRepository userAppRepository;
 
-    public ScoreService(ScoreRepository repository) {
+    public ScoreService(ScoreRepository repository, UserAppRepository userAppRepository) {
         this.repository = repository;
+        this.userAppRepository = userAppRepository;
     }
 
     public Score saveScoreForUser(Score score) {
         score.setDateTime(LocalDateTime.now());
         return repository.save(score);
     }
-
 
     public Page<Score> getTopScores(Pageable pageable) {
         return repository.findAll(pageable);

@@ -10,6 +10,8 @@ function Score() {
     const [totalPages, setTotalPages] = useState(0);
     const [searchUsername, setSearchUsername] = useState("");
     const [loading, setLoading] = useState(false);
+    const [username, setUsername] = useState(localStorage.getItem('username') || '');
+
 
     const fetchScores = async () => {
         setLoading(true);
@@ -39,6 +41,24 @@ function Score() {
         fetchScores();
     };
 
+    const handleAddScore = async () => {
+        if (!username) {
+            alert("Musisz być zalogowany, aby dodać wynik!");
+            return;
+        }
+
+        try {
+            const response = await axios.post("/api/scores", {
+                score: 10
+            });
+            alert("Dodano 10 punktów!");
+            await fetchScores();
+        } catch (err) {
+            console.error("Błąd przy dodawaniu wyniku:", err);
+            alert("Nie udało się dodać wyniku");
+        }
+    };
+
     return (
         <div className="score-container">
             <h1 className="score-title">Tablica wyników</h1>
@@ -54,6 +74,12 @@ function Score() {
                 className="score-input"
             />
 
+            {username && (
+                <button onClick={handleAddScore} className="add-score-btn">
+                    Dodaj 10 punktów
+                </button>
+            )}
+
             {loading ? (
                 <p className="score-loading">Ładowanie...</p>
             ) : (
@@ -65,6 +91,7 @@ function Score() {
                             <th>Użytkownik</th>
                             <th>Wynik</th>
                             <th>Data</th>
+                            <th>Godzina</th>
                             <th>Akcje</th>
                         </tr>
                         </thead>
@@ -73,8 +100,9 @@ function Score() {
                             <tr key={score.id}>
                                 <td>{page * PAGE_SIZE + index + 1}</td>
                                 <td>{score.username}</td>
-                                <td>{score.value}</td>
-                                <td>{new Date(score.createdAt).toLocaleString()}</td>
+                                <td>{score.score}</td>
+                                <td>{new Date(score.dateTime).toLocaleDateString('pl-PL')}</td>
+                                <td>{new Date(score.dateTime).toLocaleTimeString('pl-PL')}</td>
                                 <td>
                                     <button className="edit-btn" onClick={() => alert("Edit not implemented yet")}>
                                         Edytuj

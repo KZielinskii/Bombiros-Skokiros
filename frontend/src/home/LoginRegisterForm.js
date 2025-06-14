@@ -32,6 +32,7 @@ function LoginRegisterForm({ onLogin }) {
             const user = await response.json();
 
             if (isLogin) {
+                localStorage.setItem('username', user.username);
                 onLogin(user);
             } else {
                 const loginResponse = await fetch('http://localhost:8880/api/auth/login', {
