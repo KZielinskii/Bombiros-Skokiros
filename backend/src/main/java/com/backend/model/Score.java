@@ -19,6 +19,15 @@ public class Score {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private UserApp user;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    private String username;
 
     public Long getId() {
         return id;
