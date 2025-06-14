@@ -3,10 +3,12 @@ package com.backend.service;
 import com.backend.model.Score;
 import com.backend.model.UserApp;
 import com.backend.repository.ScoreRepository;
+import com.backend.repository.UserAppRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,9 +20,11 @@ public class ScoreService {
         this.repository = repository;
     }
 
-    public Score saveScore(Score score) {
+    public Score saveScoreForUser(Score score) {
+        score.setDateTime(LocalDateTime.now());
         return repository.save(score);
     }
+
 
     public Page<Score> getTopScores(Pageable pageable) {
         return repository.findAll(pageable);

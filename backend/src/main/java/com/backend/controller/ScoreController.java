@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +25,8 @@ public class ScoreController {
 
     @PostMapping
     public ResponseEntity<Score> saveScore(@RequestBody Score score) {
-        return ResponseEntity.ok(scoreService.saveScore(score));
+        Score saved = scoreService.saveScoreForUser(score);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping("/top")
