@@ -49,7 +49,8 @@ function Score() {
 
         try {
             const response = await axios.post("/api/scores", {
-                score: 10
+                score: 10,
+                username: username
             });
             alert("Dodano 10 punktów!");
             await fetchScores();
