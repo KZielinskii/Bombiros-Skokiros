@@ -108,6 +108,7 @@ function GamePage() {
             }
         };
 
+        //Czy gracz nie wychodzi za mape
         const isColliding = (a, b) => {
             return (
                 a.x < b.x + b.size &&
@@ -129,13 +130,13 @@ function GamePage() {
             for (let i = 0; i < bombWaveCount.current; i++) {
                 bombs.current.push({
                     x: Math.random() * (COLS * TILE_SIZE - 20),
-                    y: -50,
+                    y: -800,
                     size: 20,
                     speed: 2 + Math.random() * 3
                 });
             }
             bombWaveCount.current += 1;
-        }, 10000);
+        }, 5000);
 
 
         tileImage.onload = onImageLoad;
@@ -231,6 +232,20 @@ function GamePage() {
             bombs.current.forEach(bomb => {
                 bomb.y += bomb.speed;
             });
+
+            // Jeśli bomba dotknie bloku o wartości 1 - wybucha (np. znika lub koniec gry)
+            bombs.current = bombs.current.filter(bomb => {
+                const bottomY = bomb.y + bomb.size;
+                const tileBelow = getTile(bomb.x + bomb.size / 2, bottomY);
+
+                if (tileBelow === 1) {
+                    //todo animacja wybuchu
+                    return false;
+                }
+
+                return true;
+            });
+
 
             // Sprawdź kolizję z graczem
             for (const bomb of bombs.current) {
