@@ -7,6 +7,7 @@ function Header({ loggedUser, onLogout }) {
     const toGlobalScore = () => navigate("/score");
     const goToGameForm = () => navigate("/game-form");
     const goToHome = () => navigate("/");
+    const goToInfo = () => navigate("/info");
     const logout = () => {
         onLogout();
         navigate("/");
@@ -16,7 +17,7 @@ function Header({ loggedUser, onLogout }) {
     return (
         <header className="header">
             <h2 onClick={goToHome} className="header-title clickable">
-                Moja Aplikacja
+                Bombiros Skokiros
             </h2>
             <div className="header-content">
                 {loggedUser && (
@@ -30,6 +31,9 @@ function Header({ loggedUser, onLogout }) {
                                 <button onClick={toGlobalScore} className="button-menu">Statystyki</button>
                             </div>
                         </div>
+                        <button onClick={goToInfo} className="dropdown-btn">
+                            Informacje
+                        </button>
                         <div className="logout">
                             <button onClick={logout} className="dropdown-btn">
                                 Wyloguj się

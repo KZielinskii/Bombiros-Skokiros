@@ -1,6 +1,47 @@
 .footer {
+    background: #222;
+    color: #eee;
+    padding: 30px 20px;
     text-align: center;
-    padding: 30px 0;
-    color: white;
-    background-color: darkslategray;
+    font-family: 'Segoe UI', sans-serif;
+    margin-top: 60px;
+}
+
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.footer-title {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: darkslategray;
+}
+
+.footer-subtitle {
+    font-size: 1rem;
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+.footer-links {
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    margin: 0 10px;
+    color: #ddd;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: darkslategray;
+}
+
+.footer-copy {
+    font-size: 0.85rem;
+    color: #777;
 }

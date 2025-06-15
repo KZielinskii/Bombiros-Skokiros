@@ -7,6 +7,7 @@ import Score from './Score';
 import GameForm from "./GameForm";
 import GamePage from './GamePage';
 import Carousel from './Carousel';
+import GameInfo from "./GameInfo";
 
 function App() {
     const [loggedUser, setLoggedUser] = useState(null);
@@ -45,6 +46,7 @@ function App() {
                     <Route path="*" element={<Navigate to="/"/>}/>
                     <Route path="/game-form" element={<GameForm/>} />
                     <Route path="/play" element={<GamePage/>} />
+                    <Route path="/info" element={<GameInfo/>} />
                 </Routes>
             </main>
 

@@ -27,14 +27,23 @@ const Carousel = () => {
     }, [currentSlide]);
 
     return (
-        <div className="carousel-container">
-            <ul className="carousel" ref={carouselRef}>
-                <li className="slide"><img src="/frontend/src/home/image/image1.png" alt="Opis obrazu 1" /></li>
-                <li className="slide"><img src="/frontend/src/home/image/image2.png" alt="Opis obrazu 2" /></li>
-                <li className="slide"><img src="/frontend/src/home/image/image3.png" alt="Opis obrazu 3" /></li>
-            </ul>
-            <button className="prev" onClick={prevSlide}>Poprzedni</button>
-            <button className="next" onClick={nextSlide}>Następny</button>
+        <div className="carousel-wrapper">
+            <h1 className="carousel-title">Bombiros Skokiros</h1>
+
+            <div className="carousel-container">
+                <ul className="carousel" ref={carouselRef}>
+                    <li className="slide"><img src="/frontend/src/home/image/image1.png" alt="Opis obrazu 1" /></li>
+                    <li className="slide"><img src="/frontend/src/home/image/image2.png" alt="Opis obrazu 2" /></li>
+                    <li className="slide"><img src="/frontend/src/home/image/image3.png" alt="Opis obrazu 3" /></li>
+                </ul>
+                <button className="prev" onClick={prevSlide}>⟵</button>
+                <button className="next" onClick={nextSlide}>⟶</button>
+            </div>
+
+            <p className="carousel-description">
+                Unikaj spadających bomb i lecących strzał w tej pełnej refleksu przygodzie!
+                Graj sam – a już wkrótce z przyjaciółmi! 💣🏹
+            </p>
         </div>
     );
 };
