@@ -13,6 +13,12 @@ function GameForm() {
     const [editIndex, setEditIndex] = useState(null);
     const navigate = useNavigate();
 
+    const mapCharacterToColor = {
+        'Zielony': 'green',
+        'Czerwony': 'red',
+        'Niebieski': 'blue'
+    };
+
     const handleChange = (e) => {
         setPlayer({ ...player, [e.target.name]: e.target.value });
     };
@@ -126,7 +132,8 @@ function GameForm() {
                 type="button"
                 onClick={() => {
                     if (players.length > 0) {
-                        navigate('/play', { state: { players } });
+                        const colors = players.map(p => mapCharacterToColor[p.character] || 'green');
+                        navigate('/play', { state: { players, colors } });
                     } else {
                         setError('Dodaj co najmniej jednego gracza, aby rozpocząć grę.');
                     }

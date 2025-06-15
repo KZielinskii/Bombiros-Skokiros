@@ -36,6 +36,8 @@ function GamePage() {
     const navigate = useNavigate();
     const players = location.state?.players || [];
     const playerName = players[0]?.name || 'Gracz';
+    const colors = location.state?.colors || [];
+    const playerColor = colors[0] || 'green';
 
     const bombs = useRef([]);
     const [gameTime, setGameTime] = useState(0);
@@ -165,11 +167,11 @@ function GamePage() {
         tileImage.src = '/frontend/src/home/image/tile.png';
         backgroundImage.src = '/frontend/src/home/image/background.png';
 
-        idleImage.src = '/frontend/src/home/image/player.png';
-        leftFrames[0].src = '/frontend/src/home/image/l1_player.png';
-        leftFrames[1].src = '/frontend/src/home/image/l2_player.png';
-        rightFrames[0].src = '/frontend/src/home/image/r1_player.png';
-        rightFrames[1].src = '/frontend/src/home/image/r2_player.png';
+        idleImage.src = `/frontend/src/home/image/${playerColor}/player.png`;
+        leftFrames[0].src = `/frontend/src/home/image/${playerColor}/l1_player.png`;
+        leftFrames[1].src = `/frontend/src/home/image/${playerColor}/l2_player.png`;
+        rightFrames[0].src = `/frontend/src/home/image/${playerColor}/r1_player.png`;
+        rightFrames[1].src = `/frontend/src/home/image/${playerColor}/r2_player.png`;
 
 
         const update = () => {
