@@ -53,7 +53,7 @@ function GamePage() {
             });
             alert(`Zapisano graczowi: ${playerName} - ${gameTime} punktów!`);
             await navigate('/score');
-            
+
         } catch (err) {
             console.error("Błąd przy dodawaniu wyniku:", err);
             alert("Nie udało się dodać wyniku");

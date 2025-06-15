@@ -11,7 +11,6 @@ function Score() {
     const [totalPages, setTotalPages] = useState(0);
     const [searchUsername, setSearchUsername] = useState("");
     const [loading, setLoading] = useState(false);
-    const [username, setUsername] = useState(localStorage.getItem('username') || '');
 
     const [editingScore, setEditingScore] = useState(null);
     const [editValue, setEditValue] = useState("");
@@ -89,25 +88,6 @@ function Score() {
         fetchScores();
     };
 
-    const handleAddScore = async () => {
-        if (!username) {
-            alert("Musisz być zalogowany, aby dodać wynik!");
-            return;
-        }
-
-        try {
-            await axios.post("/api/scores", {
-                score: 10,
-                username: username
-            });
-            alert("Dodano 10 punktów!");
-            await fetchScores();
-        } catch (err) {
-            console.error("Błąd przy dodawaniu wyniku:", err);
-            alert("Nie udało się dodać wyniku");
-        }
-    };
-
     return (
         <div className="score-container">
             <h1 className="score-title">Tablica wyników</h1>
@@ -119,12 +99,6 @@ function Score() {
                 onChange={(e) => setSearchUsername(e.target.value)}
                 className="score-input"
             />
-
-            {username && (
-                <button onClick={handleAddScore} className="add-score-btn">
-                    Dodaj 10 punktów
-                </button>
-            )}
 
             {loading ? (
                 <p className="score-loading">Ładowanie...</p>
