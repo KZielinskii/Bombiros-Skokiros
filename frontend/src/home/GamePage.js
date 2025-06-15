@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 
@@ -33,6 +33,7 @@ function GamePage() {
     const canvasRef = useRef(null);
 
     const location = useLocation();
+    const navigate = useNavigate();
     const players = location.state?.players || [];
     const playerName = players[0]?.name || 'Gracz';
 
@@ -51,8 +52,8 @@ function GamePage() {
                 username: playerName
             });
             alert(`Zapisano graczowi: ${playerName} - ${gameTime} punktów!`);
-            // np. odświeżenie listy wyników lub powrót
-            // await fetchScores();
+            await navigate('/score');
+            
         } catch (err) {
             console.error("Błąd przy dodawaniu wyniku:", err);
             alert("Nie udało się dodać wyniku");

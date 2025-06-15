@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './GameForm.css';
 
 const initialPlayer = { name: '', character: '' };
-const characters = ['Wojownik', 'Mag', 'Złodziej'];
+const characters = ['Zielony', 'Czerwony', 'Niebieski'];
 
 
 function GameForm() {
@@ -30,8 +30,8 @@ function GameForm() {
         if (!validate()) return;
 
         if (editIndex === null) {
-            if (players.length >= 2) {
-                setError('Można dodać maksymalnie 2 graczy.');
+            if (players.length >= 1) {
+                setError('Niestety na tym etapie produkcji możesz zagrać tylko 1 graczem :(.');
                 return;
             }
             setPlayers([...players, player]);
@@ -99,7 +99,7 @@ function GameForm() {
                 {error && <p className="error">{error}</p>}
             </form>
 
-            <h3 className="subtitle">Uczestnicy gry (max 2)</h3>
+            <h3 className="subtitle">Uczestnicy gry:</h3>
             {players.length === 0 ? (
                 <p className="no-players">Brak dodanych graczy.</p>
             ) : (
