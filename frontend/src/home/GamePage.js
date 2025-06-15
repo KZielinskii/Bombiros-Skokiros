@@ -88,13 +88,13 @@ function GamePage() {
 
         //animacja gracza
         const idleImage = new Image();
-        const leftFrames = [new Image(), new Image(), new Image()];
-        const rightFrames = [new Image(), new Image(), new Image()];
+        const leftFrames = [new Image(), new Image()];
+        const rightFrames = [new Image(), new Image()];
 
         let imagesLoaded = 0;
         const onImageLoad = () => {
             imagesLoaded++;
-            if (imagesLoaded === 7) {
+            if (imagesLoaded === 5) {
                 requestAnimationFrame(update);
             }
         };
@@ -113,10 +113,8 @@ function GamePage() {
         idleImage.src = '/frontend/src/home/image/player.png';
         leftFrames[0].src = '/frontend/src/home/image/l1_player.png';
         leftFrames[1].src = '/frontend/src/home/image/l2_player.png';
-        leftFrames[2].src = '/frontend/src/home/image/l3_player.png';
         rightFrames[0].src = '/frontend/src/home/image/r1_player.png';
         rightFrames[1].src = '/frontend/src/home/image/r2_player.png';
-        rightFrames[2].src = '/frontend/src/home/image/r3_player.png';
 
 
         const update = () => {
@@ -172,7 +170,7 @@ function GamePage() {
 
             p.animationTimer++;
             if (p.direction !== 'idle' && p.animationTimer > 10) {
-                p.animationFrame = (p.animationFrame + 1) % 3;
+                p.animationFrame = (p.animationFrame + 1) % 2;
                 p.animationTimer = 0;
             }
             if (p.direction === 'idle') {
@@ -183,7 +181,7 @@ function GamePage() {
             // Rysowanie
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-            
+
             let imageToDraw = idleImage;
             if (p.direction === 'left') {
                 imageToDraw = leftFrames[p.animationFrame];
