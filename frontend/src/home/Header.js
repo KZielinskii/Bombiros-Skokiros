@@ -22,7 +22,7 @@ function Header({ loggedUser, onLogout }) {
                 {loggedUser && (
                     <>
                         <div className="dropdown">
-                            <button className="dropdown-btn">
+                            <button onClick={goToHome} className="dropdown-btn">
                                 Menu
                             </button>
                             <div className="dropdown-content">

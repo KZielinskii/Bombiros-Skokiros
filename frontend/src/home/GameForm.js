@@ -67,18 +67,18 @@ function GameForm() {
             <h2 className="title">Wybierz swoją postać</h2>
             <form onSubmit={handleSubmit} className="form">
                 <label className="label">
-                    Imię:
+                    Nazwa gracza:
                     <input
                         type="text"
                         name="name"
                         value={player.name}
                         onChange={handleChange}
                         className="input"
-                        placeholder="Wpisz imię"
+                        placeholder="Wpisz nazwę"
                     />
                 </label>
                 <label className="label">
-                    Postać:
+                    Wybierz postać:
                     <select
                         name="character"
                         value={player.character}

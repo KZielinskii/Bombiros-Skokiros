@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import './GamePage.css';
+import { useLocation } from 'react-router-dom';
 
 
 const map = [
@@ -31,6 +31,11 @@ const COLS = 16;
 function GamePage() {
     const canvasRef = useRef(null);
 
+    const location = useLocation();
+    const players = location.state?.players || [];
+    const playerName = players[0]?.name || 'Gracz';
+
+
     const player = useRef({
         x: 2 * TILE_SIZE,
         y: 0,
@@ -38,7 +43,10 @@ function GamePage() {
         height: 64,
         velocityX: 0,
         velocityY: 0,
-        grounded: false
+        grounded: false,
+        animationFrame: 0,
+        animationTimer: 0,
+        direction: 'idle'
     });
 
     const keys = useRef({
@@ -76,31 +84,56 @@ function GamePage() {
         const ctx = canvas.getContext('2d');
 
         const tileImage = new Image();
-        const playerImage = new Image();
         const backgroundImage = new Image();
+
+        //animacja gracza
+        const idleImage = new Image();
+        const leftFrames = [new Image(), new Image(), new Image()];
+        const rightFrames = [new Image(), new Image(), new Image()];
 
         let imagesLoaded = 0;
         const onImageLoad = () => {
             imagesLoaded++;
-            if (imagesLoaded === 3) {
+            if (imagesLoaded === 7) {
                 requestAnimationFrame(update);
             }
         };
 
         tileImage.onload = onImageLoad;
-        playerImage.onload = onImageLoad;
         backgroundImage.onload = onImageLoad;
 
+        idleImage.onload = onImageLoad;
+        leftFrames.forEach(img => img.onload = onImageLoad);
+        rightFrames.forEach(img => img.onload = onImageLoad);
+
+
         tileImage.src = '/frontend/src/home/image/tile.png';
-        playerImage.src = '/frontend/src/home/image/player.png';
         backgroundImage.src = '/frontend/src/home/image/background.png';
+
+        idleImage.src = '/frontend/src/home/image/player.png';
+        leftFrames[0].src = '/frontend/src/home/image/l1_player.png';
+        leftFrames[1].src = '/frontend/src/home/image/l2_player.png';
+        leftFrames[2].src = '/frontend/src/home/image/l3_player.png';
+        rightFrames[0].src = '/frontend/src/home/image/r1_player.png';
+        rightFrames[1].src = '/frontend/src/home/image/r2_player.png';
+        rightFrames[2].src = '/frontend/src/home/image/r3_player.png';
+
 
         const update = () => {
             const p = player.current;
 
             p.velocityX = 0;
-            if (keys.current.left) p.velocityX = -MOVE_SPEED;
-            if (keys.current.right) p.velocityX = MOVE_SPEED;
+
+            p.direction = 'idle';
+            if (keys.current.left) {
+                p.velocityX = -MOVE_SPEED;
+                p.direction = 'left';
+            }
+            if (keys.current.right) {
+                p.velocityX = MOVE_SPEED;
+                p.direction = 'right';
+            }
+
 
             p.velocityY += GRAVITY;
 
@@ -137,9 +170,27 @@ function GamePage() {
                 }
             }
 
+            p.animationTimer++;
+            if (p.direction !== 'idle' && p.animationTimer > 10) {
+                p.animationFrame = (p.animationFrame + 1) % 3;
+                p.animationTimer = 0;
+            }
+            if (p.direction === 'idle') {
+                p.animationFrame = 0;
+            }
+
+
             // Rysowanie
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+            
+            let imageToDraw = idleImage;
+            if (p.direction === 'left') {
+                imageToDraw = leftFrames[p.animationFrame];
+            } else if (p.direction === 'right') {
+                imageToDraw = rightFrames[p.animationFrame];
+            }
+            ctx.drawImage(imageToDraw, p.x, p.y, p.width, p.height);
 
             for (let row = 0; row < map.length; row++) {
                 for (let col = 0; col < map[row].length; col++) {
@@ -149,7 +200,11 @@ function GamePage() {
                 }
             }
 
-            ctx.drawImage(playerImage, p.x, p.y, p.width, p.height);
+            // Rysowanie imienia gracza
+            ctx.font = '16px Arial';
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'center';
+            ctx.fillText(playerName, p.x + p.width / 2, p.y - 10);
 
             requestAnimationFrame(update);
         };
