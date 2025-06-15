@@ -1,14 +1,17 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './GameForm.css';
 
 const initialPlayer = { name: '', character: '' };
 const characters = ['Wojownik', 'Mag', 'Złodziej'];
+
 
 function GameForm() {
     const [players, setPlayers] = useState([]);
     const [player, setPlayer] = useState(initialPlayer);
     const [error, setError] = useState('');
     const [editIndex, setEditIndex] = useState(null);
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setPlayer({ ...player, [e.target.name]: e.target.value });
@@ -118,7 +121,20 @@ function GameForm() {
                     ))}
                 </ul>
             )}
-            <button className="button" onClick={handleSubmit} type="submit">Wejdź do gry</button>
+            <button
+                className="button"
+                type="button"
+                onClick={() => {
+                    if (players.length > 0) {
+                        navigate('/play', { state: { players } });
+                    } else {
+                        setError('Dodaj co najmniej jednego gracza, aby rozpocząć grę.');
+                    }
+                }}
+            >
+                Wejdź do gry
+            </button>
+
         </div>
     );
 }
