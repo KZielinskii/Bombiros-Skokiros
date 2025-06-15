@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import { useLocation } from 'react-router-dom';
+import axios from "axios";
 
 
 const map = [
@@ -43,7 +44,20 @@ function GamePage() {
     const timeInterval = useRef(null);
     const bombWaveCount = useRef(1);
 
-
+    const handleSaveScore = async () => {
+        try {
+            await axios.post("/api/scores", {
+                score: gameTime,
+                username: playerName
+            });
+            alert(`Zapisano graczowi: ${playerName} - ${gameTime} punktów!`);
+            // np. odświeżenie listy wyników lub powrót
+            // await fetchScores();
+        } catch (err) {
+            console.error("Błąd przy dodawaniu wyniku:", err);
+            alert("Nie udało się dodać wyniku");
+        }
+    };
 
     const player = useRef({
         x: 2 * TILE_SIZE,
@@ -251,9 +265,12 @@ function GamePage() {
             for (const bomb of bombs.current) {
                 if (isColliding(player.current, bomb)) {
                     setGameOver(true);
+                    clearInterval(timeInterval.current);
+                    clearInterval(bombInterval.current);
                     return;
                 }
             }
+
 
 
 
@@ -329,7 +346,12 @@ function GamePage() {
     return (
         <div style={{ textAlign: 'center' }}>
             <h2>Gra 2D</h2>
-            <canvas ref={canvasRef} width={ROWS*TILE_SIZE} height={COLS*TILE_SIZE} style={{ border: '2px solid black' }} />
+            <canvas
+                ref={canvasRef}
+                width={ROWS * TILE_SIZE}
+                height={COLS * TILE_SIZE}
+                style={{ border: '2px solid black' }}
+            />
             {gameOver && (
                 <div style={{
                     position: 'absolute',
@@ -343,12 +365,22 @@ function GamePage() {
                     fontSize: '24px',
                     zIndex: 10
                 }}>
-                    Koniec gry
+                    <p>Koniec gry</p>
+                    <p>Twój wynik: {gameTime} sekund</p>
+                    <button onClick={handleSaveScore} style={{
+                        marginTop: '20px',
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        borderRadius: '8px',
+                        cursor: 'pointer'
+                    }}>
+                        Zapisz wynik
+                    </button>
                 </div>
             )}
-
         </div>
     );
+
 }
 
 export default GamePage;
