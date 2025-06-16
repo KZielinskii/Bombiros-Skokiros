@@ -46,6 +46,9 @@ function GamePage() {
     const bombInterval = useRef(null);
     const timeInterval = useRef(null);
     const bombWaveCount = useRef(1);
+    const arrows = useRef([]);
+    const arrowInterval = useRef(null);
+
 
     const handleSaveScore = async () => {
         try {
@@ -111,6 +114,8 @@ function GamePage() {
 
         const tileImage = new Image();
         const backgroundImage = new Image();
+        const arrowImage = new Image();
+        const bombImage = new Image();
 
         //animacja gracza
         const idleImage = new Image();
@@ -120,17 +125,20 @@ function GamePage() {
         let imagesLoaded = 0;
         const onImageLoad = () => {
             imagesLoaded++;
-            if (imagesLoaded === 5) {
+            if (imagesLoaded === 7) {
                 requestAnimationFrame(update);
             }
         };
 
         //Czy gracz nie wychodzi za mape
         const isColliding = (a, b) => {
+            const bWidth = b.width || b.size;
+            const bHeight = b.height || b.size;
+
             return (
-                a.x < b.x + b.size &&
+                a.x < b.x + bWidth &&
                 a.x + a.width > b.x &&
-                a.y < b.y + b.size &&
+                a.y < b.y + bHeight &&
                 a.y + a.height > b.y
             );
         };
@@ -155,6 +163,18 @@ function GamePage() {
             bombWaveCount.current += 1;
         }, 5000);
 
+        //Fale strzał
+        arrowInterval.current = setInterval(() => {
+            arrows.current.push({
+                x: COLS * TILE_SIZE,
+                y: (ROWS - 2) * TILE_SIZE,
+                width: 32,
+                height: 32,
+                speed: 4
+            });
+        }, 5000);
+
+
 
         tileImage.onload = onImageLoad;
         backgroundImage.onload = onImageLoad;
@@ -172,6 +192,12 @@ function GamePage() {
         leftFrames[1].src = `/frontend/src/home/image/${playerColor}/l2_player.png`;
         rightFrames[0].src = `/frontend/src/home/image/${playerColor}/r1_player.png`;
         rightFrames[1].src = `/frontend/src/home/image/${playerColor}/r2_player.png`;
+
+        bombImage.src = '/frontend/src/home/image/bomb.png';
+        bombImage.onload = onImageLoad;
+
+        arrowImage.src = '/frontend/src/home/image/arrow.png';
+        arrowImage.onload = onImageLoad;
 
 
         const update = () => {
@@ -274,8 +300,24 @@ function GamePage() {
                 }
             }
 
+            // Ruch strzał
+            arrows.current.forEach(arrow => {
+                arrow.x -= arrow.speed;
+            });
 
+            // Usuwanie strzał, które wyszły poza ekran
+            arrows.current = arrows.current.filter(arrow => arrow.x + arrow.width > 0);
 
+            // Sprawdź kolizję strzały z graczem
+            for (const arrow of arrows.current) {
+                if (isColliding(player.current, arrow)) {
+                    setGameOver(true);
+                    clearInterval(timeInterval.current);
+                    clearInterval(bombInterval.current);
+                    clearInterval(arrowInterval.current);
+                    return;
+                }
+            }
 
             // Rysowanie
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -310,12 +352,12 @@ function GamePage() {
 
             // Rysuj bomby
             bombs.current.forEach(bomb => {
-                ctx.beginPath();
-                ctx.fillStyle = 'black';
-                ctx.globalAlpha = 0.8;
-                ctx.arc(bomb.x + bomb.size / 2, bomb.y + bomb.size / 2, bomb.size / 2, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
+                ctx.drawImage(bombImage, bomb.x, bomb.y, bomb.size, bomb.size);
+            });
+
+            // Rysuj strzały
+            arrows.current.forEach(arrow => {
+                ctx.drawImage(arrowImage, arrow.x, arrow.y, arrow.width, arrow.height);
             });
 
             requestAnimationFrame(update);
@@ -341,6 +383,7 @@ function GamePage() {
             window.removeEventListener('keyup', handleKeyUp);
             clearInterval(timeInterval.current);
             clearInterval(bombInterval.current);
+            clearInterval(arrowInterval.current);
         };
 
     }, []);
