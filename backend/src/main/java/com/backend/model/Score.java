@@ -11,6 +11,8 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String username;
+
     private int score;
 
     private LocalDateTime dateTime;
@@ -19,6 +21,7 @@ public class Score {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private UserApp user;
+
     public String getUsername() {
         return username;
     }
@@ -26,8 +29,6 @@ public class Score {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    private String username;
 
     public Long getId() {
         return id;

@@ -391,7 +391,6 @@ function GamePage() {
 
     return (
         <div style={{ textAlign: 'center' }}>
-            <h2>Gra 2D</h2>
             <canvas
                 ref={canvasRef}
                 width={ROWS * TILE_SIZE}

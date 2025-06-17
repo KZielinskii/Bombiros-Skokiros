@@ -5,8 +5,8 @@ import "./Score.css";
 const PAGE_SIZE = 5;
 
 function Score() {
-    const [allScores, setAllScores] = useState([]);  // pełna lista
-    const [scores, setScores] = useState([]);        // wyniki po filtrze + stronicowaniu
+    const [allScores, setAllScores] = useState([]);
+    const [scores, setScores] = useState([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [searchUsername, setSearchUsername] = useState("");
