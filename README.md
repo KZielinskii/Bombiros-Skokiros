@@ -1,4 +1,4 @@
-# 🎮 Projekt: Aplikacja Webowa – Spring Boot + React
+# 🎮 Projekt: Bombiros-Skokiros – Spring Boot + React
 
 Ten projekt to pełnoprawna aplikacja webowa zbudowana z wykorzystaniem:
 
