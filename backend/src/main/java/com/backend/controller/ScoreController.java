@@ -30,10 +30,18 @@ public class ScoreController {
     @GetMapping("/top")
     public ResponseEntity<Page<Score>> getTopScores(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String username) {
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("score").descending());
-        return ResponseEntity.ok(scoreService.getTopScores(pageable));
+
+        Page<Score> scores = (username == null || username.isEmpty())
+                ? scoreService.getTopScores(pageable)
+                : scoreService.getTopScoresByUsername(username, pageable);
+
+        return ResponseEntity.ok(scores);
     }
+
 
 
     @GetMapping

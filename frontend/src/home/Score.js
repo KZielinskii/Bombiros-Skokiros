@@ -5,11 +5,11 @@ import "./Score.css";
 const PAGE_SIZE = 5;
 
 function Score() {
-    const [allScores, setAllScores] = useState([]);
     const [scores, setScores] = useState([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const [searchUsername, setSearchUsername] = useState("");
+    const [searchInput, setSearchInput] = useState(""); // to co użytkownik wpisuje
+    const [searchQuery, setSearchQuery] = useState(""); // to co trafia do zapytania
     const [loading, setLoading] = useState(false);
 
     const [editingScore, setEditingScore] = useState(null);
@@ -42,10 +42,17 @@ function Score() {
     const fetchScores = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`/api/scores/top?page=0&size=1000`);
+            const response = await axios.get(`/api/scores/top`, {
+                params: {
+                    page,
+                    size: PAGE_SIZE,
+                    username: searchQuery || undefined // tylko jeśli coś podano
+                }
+            });
+
             const data = response.data;
-            const scores = data.content || data;
-            setAllScores(scores);
+            setScores(data.content || data); // zależy od backendu
+            setTotalPages(data.totalPages || 1);
         } catch (err) {
             console.error("Błąd przy pobieraniu wyników:", err);
         } finally {
@@ -53,34 +60,9 @@ function Score() {
         }
     };
 
-    // Efekt do aktualizacji widocznych wyników przy zmianie allScores, searchUsername lub page
-    useEffect(() => {
-        // Filtrowanie lokalne po username
-        const filtered = searchUsername
-            ? allScores.filter(s =>
-                s.username.toLowerCase().includes(searchUsername.toLowerCase())
-            )
-            : allScores;
-
-        // Obliczamy totalPages dla aktualnego filtra
-        const pages = Math.ceil(filtered.length / PAGE_SIZE);
-        setTotalPages(pages);
-
-        // Pobieramy tylko wyniki dla aktualnej strony
-        const start = page * PAGE_SIZE;
-        const pagedScores = filtered.slice(start, start + PAGE_SIZE);
-
-        setScores(pagedScores);
-    }, [allScores, searchUsername, page]);
-
-    // Gdy zmienia się searchUsername resetujemy stronę na 0
-    useEffect(() => {
-        setPage(0);
-    }, [searchUsername]);
-
     useEffect(() => {
         fetchScores();
-    }, []);
+    }, [page, searchQuery]);
 
     const handleDelete = async (id) => {
         if (!window.confirm("Na pewno chcesz usunąć wynik?")) return;
@@ -88,17 +70,25 @@ function Score() {
         fetchScores();
     };
 
+    const handleSearchClick = () => {
+        setPage(0); // resetuj stronę przy nowym wyszukiwaniu
+        setSearchQuery(searchInput);
+    };
+
     return (
         <div className="score-container">
             <h1 className="score-title">Tablica wyników</h1>
 
-            <input
-                type="text"
-                placeholder="🔍 Szukaj po nazwie użytkownika..."
-                value={searchUsername}
-                onChange={(e) => setSearchUsername(e.target.value)}
-                className="score-input"
-            />
+            <div className="score-search-bar">
+                <input
+                    type="text"
+                    placeholder="🔍 Szukaj po nazwie użytkownika..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className="score-input"
+                />
+                <button onClick={handleSearchClick} className="save-btn">Szukaj</button>
+            </div>
 
             {loading ? (
                 <p className="score-loading">Ładowanie...</p>
@@ -107,7 +97,7 @@ function Score() {
                     <table className="score-table">
                         <thead>
                         <tr>
-                            <th></th>
+                            <th>#</th>
                             <th>Użytkownik</th>
                             <th>Wynik</th>
                             <th>Data</th>
@@ -139,7 +129,6 @@ function Score() {
                                             score.score
                                         )}
                                     </td>
-
                                     <td>{new Date(score.dateTime).toLocaleDateString('pl-PL')}</td>
                                     <td>{new Date(score.dateTime).toLocaleTimeString('pl-PL')}</td>
                                     <td>

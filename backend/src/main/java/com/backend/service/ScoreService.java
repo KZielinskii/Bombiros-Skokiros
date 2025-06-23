@@ -23,16 +23,16 @@ public class ScoreService {
         return repository.save(score);
     }
 
+    public List<Score> getScoresByUsername(String username) {
+        return repository.findByUsernameIgnoreCase(username);
+    }
+
     public Page<Score> getTopScores(Pageable pageable) {
         return repository.findAll(pageable);
     }
 
     public List<Score> getAllScores() {
         return repository.findAll();
-    }
-
-    public List<Score> getScoresByUsername(String username) {
-        return repository.findByUserUsername(username);
     }
 
     public Score updateScore(Long id, Score updatedScore) {
@@ -43,8 +43,12 @@ public class ScoreService {
         return repository.save(existing);
     }
 
-
     public void deleteScore(Long id) {
         repository.deleteById(id);
     }
+
+    public Page<Score> getTopScoresByUsername(String username, Pageable pageable) {
+        return repository.findByUsernameContainingIgnoreCase(username, pageable);
+    }
+
 }

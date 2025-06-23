@@ -150,3 +150,12 @@
 .add-score-btn:hover {
     background-color: #732d91;
 }
+
+.score-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
